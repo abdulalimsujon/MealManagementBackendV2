@@ -1,7 +1,8 @@
 const { hashPassword } = require("../helper/auth");
 
 const jwt = require("jsonwebtoken");
-const Member=require("../model/MemberModel")
+const Member=require("../model/MemberModel");
+
 
 
 
@@ -12,7 +13,7 @@ const Member=require("../model/MemberModel")
 exports.registration = async(req,res)=>{
 
     try{
-        const {name,email,password,address,role,photo} = req.body;
+        const {name,email,password,address,role,photo,mobile} = req.body;
 
         const existUser = await Member.findOne({ email: email })
         console.log(existUser);
@@ -27,7 +28,7 @@ exports.registration = async(req,res)=>{
             name,
             email,
             password: hash,
-         
+            mobile,
             address,
             role,
             photo
@@ -44,13 +45,13 @@ exports.registration = async(req,res)=>{
 
         res.json({
             member:{
-
                 name:member.name,
                 email:member.email,
                 password: hash,
                 meal:member.meal,
                 balance:member.balance,
                 address:member.address,
+                mobile:member.mobile,
                 role:member.role,
                 photo:member.photo
 
@@ -103,25 +104,66 @@ exports.UpdateProfile=async(req,res)=>{
 //--------------------->get all member-------------------------->
 
 exports.Allmember=async(req,res)=>{
-    const {email}= req.body;
+  
 
     const allMember= await Member.find({});
+    if(allMember.length==0){
+        res.status(400).json({error:"No member"})
+        
+    }else{
 
-    res.json({members:allMember})
+        res.status(200).json({members:allMember})
+
+    }
+    
 
 }
+///-------------------------->search by mobile---------------->
+
+exports.Search=async(req,res)=>{
+   
+    const {phone} = req.params;
+
+   const SearchMember=  await Member.find({mobile:phone});
+    if(SearchMember.length==0){
+        res.status(400).json({error:"No member"})
+        
+    }else{
+
+        res.status(200).json({member:SearchMember})
+
+    }
+    
+}
+
+
 
   
   ///---------------------delete user by admin-------------------------->
 
   exports.deleteMember=async(req,res)=>{
+    try{
 
-    const {id} = req.params;
+        const {id} = req.params;
 
-    const member= await Member.findByIdAndDelete({_id:id});
-    console.log(member)
+        await Member.findOneAndDelete({_id:id},(error,data)=>{
+   
+          if(error){
+            res.status(400).json({data:error})
+          }else{
+            console.log(data)
+            res.status(200).json({data:data})
+          }
+   
+        });
+
+    }catch(error){
+        console.log(error)
+    }
+
+   
+    
   }
-
 
 
 

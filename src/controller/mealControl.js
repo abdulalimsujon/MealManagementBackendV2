@@ -17,12 +17,18 @@ try{
     memberId,
     meal,
     balance
+  
+    
+  
+    
 }).save();
     res.json({
         mealControl:{
             memberId:mealControl.memberId,
            meal: mealControl.meal,
-            balance:mealControl.balance
+            balance:mealControl.balance,
+            date:mealControl.createdAt
+            
 
         }
     })
@@ -91,23 +97,24 @@ exports.currentBalance=async(req,res)=>{
     }
 }
 
-
-
-
-
 ///...............................Meal rate.................................>
 
 
 exports.MealRate=async(req,res)=>{
 
     const {grantTotalCost} = req.params;
+
       const totalMeal = await  MealControl.aggregate([      
             {
               $group: {
                 _id: null,          
                 grantTotalMeal:{
                   $sum: '$meal'  
-                }
+                },
+  
+                grantTotalBalance:{
+                  $sum: '$balance'  
+                },
   
               }
             
@@ -117,8 +124,9 @@ exports.MealRate=async(req,res)=>{
           if(error){
               console.log(error)
           }else{
-              const milRate = parseFloat(grantTotalCost/data[0].grantTotalMeal)     
-              res.json({status:"success",data:{milRate,totalMeal:data[0].grantTotalMeal}})
+              const milRate = parseFloat(grantTotalCost/data[0].grantTotalMeal) 
+              const existBalance = parseFloat((data[0].grantTotalBalance)-(milRate*data[0].grantTotalMeal))   
+              res.json({status:"success",data:{milRate,grandBalace:data[0].grantTotalBalance,totalMeal:data[0].grantTotalMeal,grantExistBalance:existBalance}})
           }
   
       })
@@ -138,3 +146,91 @@ exports.updateByAdmin=async(req,res)=>{
 
 
 }
+
+
+
+  //---------------------->grand total balance-------------------------->
+
+  exports.grandTotal = async(req,res)=>{
+    const totalInfo = await  MealControl.aggregate([      
+          {
+            $group: {
+              _id: null,          
+              grantTotalMeal:{
+                $sum: '$meal'  
+              },
+              grantTotalBalance:{
+                $sum: '$balance'  
+              }
+
+            }
+          
+          }
+    ],(error,data)=>{
+
+        if(error){
+            console.log(error)
+        }else{
+         
+                
+            res.json({status:"success",data:{grandTotalMeal:data[0].grantTotalMeal,grandTotalBalance:data[0].grantTotalBalance}})
+        }
+
+    })
+}
+  //.............................. meal info by phone...................................
+
+  exports.mealInfo=async(req,res)=>{
+    const {phone }= req.params;
+
+    try{
+
+      const member = await MealControl.findOne({mobile:phone});
+
+    
+      if(member){
+          
+          res.status(200).json({member})
+      }else{
+  
+          res.json({'status':"fail"})
+  
+      }
+  
+      }catch(error){
+  
+          res.json("something went wrong")
+        
+      }
+  }
+
+  ///-----------------------------meal info by date---------------------->
+
+  exports.mealInfo=async(req,res)=>{
+    const {createdAt }= req.params;
+
+    try{
+
+      const member = await MealControl.findOne({createdAt:createdAt});
+
+    
+      if(member){
+          
+          res.status(200).json({member})
+      }else{
+  
+          res.json({'status':"fail"})
+  
+      }
+  
+      }catch(error){
+  
+          res.json("something went wrong")
+        
+      }
+  }
+
+
+  
+
+

@@ -31,6 +31,10 @@ const MemberSchema = mongoose.Schema({
         type:Number,
         default:0
     },
+    mobile:{
+        type:Number,
+
+    },
     photo: {
             data: Buffer,
             contentType: String,
