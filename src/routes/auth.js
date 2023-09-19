@@ -1,6 +1,7 @@
 const express = require('express');
 const { requireSignIn } = require('../middleware/requireSignIn');
 const { isAdmin } = require('../middleware/isAdmin');
+const { signIn, registration } = require('../controller/member');
 
 
 
@@ -19,6 +20,9 @@ router.get('/isAdmin',requireSignIn,isAdmin,(req,res)=>{
         ok: true
     })
 });
+
+router.get("/signIn",signIn);
+router.post("/register",registration);
 
 
 router.patch( requireSignIn)

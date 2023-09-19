@@ -31,3 +31,4 @@ exports.hashPassword=(password)=>{
 exports.comparePassword = (password,newPassword)=>{
     return bcrypt.compare(password,newPassword);
 }
+

@@ -12,8 +12,6 @@ router.get('/perMemberMealCost/:email/:mealRate',perMemberMealCost);
 router.get('/currentBalancePerMember/:email/:totalMealCost',currentBalance);
 router.get('/grandTotal',grandTotal);
 router.get('/mealInfo/:id',mealInfo);
-
-
 router.get('/mealRate/:grantTotalCost',MealRate);
 
 

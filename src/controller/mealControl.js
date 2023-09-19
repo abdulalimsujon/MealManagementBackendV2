@@ -1,6 +1,6 @@
 
 
-// regular meal and balance of a member
+// ---------------regular meal and balance of a member
 
 const MealControl = require("../model/MealControl");
 const Member = require("../model/MemberModel");

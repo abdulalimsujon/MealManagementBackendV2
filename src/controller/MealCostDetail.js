@@ -8,7 +8,7 @@ const MealCostDetail = require("../model/MealCostDetail");
 
 exports.MealDetail=async(req,res)=>{
     const {fields} = req.body; 
-     console.log("==========>",fields)
+    //  console.log("==========>",fields)
      
     const mealDetail = await new MealCostDetail({
         
@@ -28,7 +28,7 @@ exports.MealDetail=async(req,res)=>{
     })
 }
 
-///-------------get total meal cost--------------------------->
+///-------------get total meal cost detail--------------------------->
 
 exports.getMealCostDetail=async(req,res)=>{
 
@@ -49,6 +49,9 @@ exports.getMealCostDetail=async(req,res)=>{
     }
     if(mealCostDetail.length>=0){
         res.status(200).json({regularMealCostTotal:total})
+    }else{
+        res.status(400).json({error:"No Meal found"})
+
     }
 
    

@@ -1,4 +1,4 @@
-const { hashPassword } = require("../helper/auth");
+const { hashPassword, comparePassword, LocalStorageSetValue } = require("../helper/auth");
 
 const jwt = require("jsonwebtoken");
 const Member=require("../model/MemberModel");
@@ -42,8 +42,10 @@ exports.registration = async(req,res)=>{
             _id: member.email
         }, process.env.JWT_SECRATE, { expiresIn: '7d' });
 
+   
+        res.status(200).json({
 
-        res.json({
+
             member:{
                 name:member.name,
                 email:member.email,
@@ -57,6 +59,7 @@ exports.registration = async(req,res)=>{
 
             },
             token
+            
         })
 
     }catch(error){
@@ -65,7 +68,35 @@ exports.registration = async(req,res)=>{
 
     }
 }
+/// ---------------------------->member sign in----------------->
 
+exports.signIn=async(req,res)=>{
+    try{
+
+        const {email,password} =req.body;
+
+        const FindMember = await Member.findOne({email:email});
+
+        const compare = comparePassword(FindMember.password,password)
+
+        console.log("dfhsa",FindMember)
+        console.log(compare)
+
+        if(FindMember && compare){
+     
+            res.status(200).json({status:"success",data:FindMember})
+        }else{
+            res.status(400).json({error:"No member Or Password wrong"});
+        }
+
+        
+
+
+    }catch(error){
+        console.log(error)
+    }
+   
+}
 ///================>update member profile=======================>
 
 exports.UpdateProfile=async(req,res)=>{
