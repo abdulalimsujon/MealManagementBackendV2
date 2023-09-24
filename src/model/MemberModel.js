@@ -40,6 +40,7 @@ const MemberSchema = mongoose.Schema({
             contentType: String,
         }
 
+
 },{
     versionKey: false ,
     timeStamps:true

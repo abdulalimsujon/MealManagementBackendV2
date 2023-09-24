@@ -1,7 +1,8 @@
-const { hashPassword, comparePassword, LocalStorageSetValue } = require("../helper/auth");
+const { hashPassword, comparePassword} = require("../helper/auth");
 
 const jwt = require("jsonwebtoken");
 const Member=require("../model/MemberModel");
+const bcrypt = require('bcrypt');
 
 
 
@@ -13,10 +14,26 @@ const Member=require("../model/MemberModel");
 exports.registration = async(req,res)=>{
 
     try{
-        const {name,email,password,address,role,photo,mobile} = req.body;
+        const {name,email,password,address,role,photo,mobile,MealInfo} = req.body;
+
+        if(!name){
+            return res.json({error:"name is empty"})
+        }
+        if(!email){
+            return res.json({error:"email is empty"})
+        }
+
+        if(!password && password.length<6){
+            return res.json({error:"Atleast 6 digit is required"})
+        }
+        if(!mobile){
+        
+            return res.json('mobile is required')
+
+        }
 
         const existUser = await Member.findOne({ email: email })
-        console.log(existUser);
+       // console.log(existUser);
         if (existUser) {
             res.json({ error: "Email is taken" })
         }
@@ -33,17 +50,16 @@ exports.registration = async(req,res)=>{
             role,
             photo
 
-
         }).save();
 
          //create token
 
          const token = jwt.sign({
-            _id: member.email
+            email: member.email
         }, process.env.JWT_SECRATE, { expiresIn: '7d' });
 
    
-        res.status(200).json({
+        res.status(200).json({ status:"success",
 
 
             member:{
@@ -75,22 +91,37 @@ exports.signIn=async(req,res)=>{
 
         const {email,password} =req.body;
 
-        const FindMember = await Member.findOne({email:email});
 
-        const compare = comparePassword(FindMember.password,password)
 
-        console.log("dfhsa",FindMember)
-        console.log(compare)
-
-        if(FindMember && compare){
-     
-            res.status(200).json({status:"success",data:FindMember})
-        }else{
-            res.status(400).json({error:"No member Or Password wrong"});
+        if(!email){
+            return res.json({error:"Email or Password is empty"})
+        }
+        if (!password && password.length < 6) {
+            return res.json({ error: 'password must be 6 characters' })
         }
 
-        
+        const FindMember = await Member.findOne({email:email});
 
+       
+
+        // 4. compare password
+        const match = await comparePassword(password, FindMember.password);
+        if (!match) {
+          return res.json({ error: "Invalid email or password" });
+        }
+
+        if(FindMember){
+
+            let paylaod = {exp: Math.floor(Date.now()/1000)+(24*60*60),FindMember}
+
+            let token = jwt.sign(paylaod,process.env.JWT_SECRATE)
+     
+          return   res.status(200).json({status:"success",data:FindMember,token:token})
+        }else{
+            
+          return res.json({error:"Not member or Wrong Password"})
+
+        }
 
     }catch(error){
         console.log(error)

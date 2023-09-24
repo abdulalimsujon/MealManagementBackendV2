@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/registration',registration);
 router.get('/allMember',Allmember);
 router.get('/searchByMobile/:phone',Search);
-router.delete('/deleteMember/:id',deleteMember);
+router.get('/deleteMember/:id',deleteMember);
 
 router.post('/updateProfile',UpdateProfile);
 

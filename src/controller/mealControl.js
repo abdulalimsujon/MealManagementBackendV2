@@ -1,6 +1,6 @@
 
 
-// ---------------regular meal and balance of a member
+// ------regular meal and balance of a member------->
 
 const MealControl = require("../model/MealControl");
 const Member = require("../model/MemberModel");
@@ -56,7 +56,7 @@ exports.perMemberMealCost=async(req,res)=>{
 
     if(member){
         const totalCost = mealRate*(member.meal)
-        res.json({'status':"success",data:totalCost})
+        res.json({'status':"success",totalMealCost:totalCost,MemberTotalMeal: member.meal })
     }else{
 
         res.json({'status':"fail"})
@@ -83,7 +83,7 @@ exports.currentBalance=async(req,res)=>{
 
     if(member){
         const currentBalance = (member.balance)-totalMealCost;
-        res.json({'status':"success",data:currentBalance})
+        res.json({'status':"success",currentBalance})
     }else{
 
         res.json({'status':"fail"})

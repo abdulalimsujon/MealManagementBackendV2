@@ -21,7 +21,7 @@ router.get('/isAdmin',requireSignIn,isAdmin,(req,res)=>{
     })
 });
 
-router.get("/signIn",signIn);
+router.post("/signIn",signIn);
 router.post("/register",registration);
 
 
