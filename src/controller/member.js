@@ -174,9 +174,14 @@ exports.Allmember=async(req,res)=>{
         
     }else{
 
+        console.log("+++",allMember[0]._id)
+
+
         res.status(200).json({members:allMember})
 
     }
+
+   
     
 
 }

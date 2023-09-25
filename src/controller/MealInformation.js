@@ -1,37 +1,37 @@
-const MealInformation = require("../model/MealInformation");
+// const MealInformation = require("../model/MealInformation");
 
 
 
-///-----------------insert Per Member Meal cost-------------------->
+// ///-----------------insert Per Member Meal cost-------------------->
 
-exports.MealInfoPerMember = async(req,res)=>{
+// exports.MealInfoPerMember = async(req,res)=>{
     
-    try{
-        const {PerMemberMealCost,CurrentBalance,memberId}=req.body;
+//     try{
+//         const {PerMemberMealCost,CurrentBalance,memberId}=req.body;
     
     
-      const perMember=  await new MealInformation({
-        memberId,
-        PerMemberMealCost,
-        CurrentBalance
+//       const perMember=  await new MealInformation({
+//         memberId,
+//         PerMemberMealCost,
+//         CurrentBalance
             
-    }).save();
-        res.json({
-            PerMemberMealCost:{
-                memberId:perMember.memberId,
-                TotalMealCost: perMember.meal,
-                balance:perMember.balance,
-                CurrentBalance:perMember.CurrentBalance
+//     }).save();
+//         res.json({
+//             PerMemberMealCost:{
+//                 memberId:perMember.memberId,
+//                 TotalMealCost: perMember.meal,
+//                 balance:perMember.balance,
+//                 CurrentBalance:perMember.CurrentBalance
                 
     
-            }
-        })
+//             }
+//         })
     
-    }catch(error){
+//     }catch(error){
     
-        res.status(200).json(error)
+//         res.status(200).json(error)
     
-    }
+//     }
     
-    }
+//     }
     

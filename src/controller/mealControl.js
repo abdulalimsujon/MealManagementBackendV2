@@ -41,8 +41,82 @@ try{
 
 }
 
+///------------------ get all regular meal of each member--------->
+
+exports.MealInformation=async(req,res)=>{
 
 
+      const find = await Member.find({})
+    //  console.log("=======",find[0]._id)
+
+    
+
+   
+
+          await  MealControl.aggregate([      
+        {
+            $group: {
+            _id:"$memberId",
+                totalMeal:{
+                    $sum: "$meal"
+     
+                 },
+                 totalBalance:{
+                    $sum: "$balance"
+
+                 }
+            }
+          
+        } 
+        
+        
+      ]
+      ,async(error,data)=>{
+
+
+        const ppp = [];
+
+  
+          if(error){
+              console.log(error)
+          }else{      
+            
+          
+                  const EachPersonMealInfo=[];
+               
+             for (let i in data){
+               
+                   
+                      
+                const member= await Member.find({ _id: data[i]._id})
+
+                var MemberInfo= {};
+
+                        for (let j in member){
+
+                          MemberInfo["name"] = member[j]?.name;
+                          MemberInfo["email"] = member[j]?.email;
+                          MemberInfo["totalMeal"] = data[i]?.totalMeal;
+                          MemberInfo["totalBalance"] =data[i]?.totalBalance;
+                           
+                         
+                        }
+
+                        EachPersonMealInfo.push(MemberInfo)                    
+                
+             }    
+
+          
+            res.json({status:"success",EachPersonMealInfo})           
+             
+          }
+  
+      }
+
+
+      )
+
+  }
 //----------------------->total cost of a member---------------->
 
 exports.perMemberMealCost=async(req,res)=>{
@@ -59,7 +133,7 @@ exports.perMemberMealCost=async(req,res)=>{
         res.json({'status':"success",totalMealCost:totalCost,MemberTotalMeal: member.meal })
     }else{
 
-        res.json({'status':"fail"})
+        res.json({'status':"fail"}) 
 
     }
 
