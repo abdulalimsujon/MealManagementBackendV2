@@ -1,5 +1,6 @@
 const express = require('express');
-const { registration, Allmember,  UpdateProfile,  deleteMember, Search } = require('../controller/member');
+const { registration, Allmember,    deleteMember, Search, getProfileData, UpdateProfile } = require('../controller/member');
+
 const router = express.Router();
 
 
@@ -8,7 +9,9 @@ router.get('/allMember',Allmember);
 router.get('/searchByMobile/:phone',Search);
 router.get('/deleteMember/:id',deleteMember);
 
-router.post('/updateProfile',UpdateProfile);
+
+router.post('/profileUpdate/:email',UpdateProfile)
+router.get('/getProfileData/:email',getProfileData)
 
 
 

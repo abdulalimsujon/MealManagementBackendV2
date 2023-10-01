@@ -32,7 +32,7 @@ exports.MealDetail=async(req,res)=>{
 
 exports.getMealCostDetail=async(req,res)=>{
 
-    const mealCostDetail = await  MealCostDetail.find({})
+    const mealCostDetail = await  MealCostDetail.find({}).sort({createDate:1})
     
     let total=0;
 
@@ -48,7 +48,7 @@ exports.getMealCostDetail=async(req,res)=>{
 
     }
     if(mealCostDetail.length>=0){
-        res.status(200).json({regularMealCostTotal:total})
+       res.status(200).json({regularMealCostTotal:total,data:mealCostDetail})
     }else{
         res.status(400).json({error:"No Meal found"})
 

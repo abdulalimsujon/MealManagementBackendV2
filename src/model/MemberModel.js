@@ -35,10 +35,9 @@ const MemberSchema = mongoose.Schema({
         type:Number,
 
     },
-    photo: {
-            data: Buffer,
-            contentType: String,
-        }
+
+        photo:{type:String},
+        
 
 
 },{

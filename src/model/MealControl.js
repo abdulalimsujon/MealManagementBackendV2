@@ -16,7 +16,8 @@ const MealControlSchema = mongoose.Schema({
     balance:{
         type:Number,
         default:0
-    }
+    },
+    createDate:{type:Date,default:Date.now()},
 
 
 },{

@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { ObjectId } = mongoose.Schema;
 
 
 const MealInformationSchema= mongoose.Schema({
+    
 
     memberId: {
         type: ObjectId,
@@ -10,11 +11,11 @@ const MealInformationSchema= mongoose.Schema({
         required: true,
     }
     ,
-    perMemberMealCost:{
+    perMemberBalance:{
         type:Number,
         default:0
     },
-    currentBalance:{
+    PerMemberMeal:{
         type:Number,
         default:0
 
@@ -27,6 +28,6 @@ const MealInformationSchema= mongoose.Schema({
 })
 
 
-const MealInformation = mongoose.model('MealInformation',MealInformationSchema)
+const perMemberMealInfo = mongoose.model('perMemberMealInfo',MealInformationSchema)
 
-module.exports = MealInformation;
+module.exports =perMemberMealInfo;

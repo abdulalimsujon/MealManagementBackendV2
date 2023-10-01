@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 exports.requireSignIn =(req,res,next)=>{
     try{
 
-        const token = req.headers.authorization;
+        const token = req.headers.token;
+        console.log(token)
         const decode = jwt.verify(token,process.env.JWT_SECRATE)
 
         req.member = decode;

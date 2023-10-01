@@ -1,6 +1,6 @@
 
 
-// ------regular meal and balance of a member------->
+// ------create regular meal and balance of a member------->
 
 const MealControl = require("../model/MealControl");
 const Member = require("../model/MemberModel");
@@ -41,10 +41,15 @@ try{
 
 }
 
+
 ///------------------ get all regular meal of each member--------->
 
 exports.MealInformation=async(req,res)=>{
+    
 
+  const {mealRate} = req.params;
+
+  console.log(mealRate)
 
       const find = await Member.find({})
     //  console.log("=======",find[0]._id)
@@ -73,9 +78,6 @@ exports.MealInformation=async(req,res)=>{
       ]
       ,async(error,data)=>{
 
-
-        const ppp = [];
-
   
           if(error){
               console.log(error)
@@ -98,6 +100,7 @@ exports.MealInformation=async(req,res)=>{
                           MemberInfo["email"] = member[j]?.email;
                           MemberInfo["totalMeal"] = data[i]?.totalMeal;
                           MemberInfo["totalBalance"] =data[i]?.totalBalance;
+                          MemberInfo["ExistBalance"] = (data[i]?.totalBalance)-(data[i]?.totalMeal * mealRate);
                            
                          
                         }
@@ -117,6 +120,8 @@ exports.MealInformation=async(req,res)=>{
       )
 
   }
+
+ 
 //----------------------->total cost of a member---------------->
 
 exports.perMemberMealCost=async(req,res)=>{
@@ -144,34 +149,6 @@ exports.perMemberMealCost=async(req,res)=>{
     }
 }
 
-//.............. current balance of a member....................>
-
-exports.currentBalance=async(req,res)=>{
-
-    
-    const {totalMealCost,email} = req.params;
-
-    try{
-
-    const member = await MealControl.findOne({email:email});
-
-    if(member){
-        const currentBalance = (member.balance)-totalMealCost;
-        res.json({'status':"success",currentBalance})
-    }else{
-
-        res.json({'status':"fail"})
-
-    }
-
-    }catch(error){
-
-        res.json("something went wrong")
-      
-    }
-}
-
-///...............................Meal rate.................................>
 
 
 exports.MealRate=async(req,res)=>{
@@ -219,6 +196,29 @@ exports.updateByAdmin=async(req,res)=>{
     await MealControl.findOneAndUpdate({_id:id},{meal:meal,balance:balance,role:role})
 
 
+}
+
+// ------------------>edit meal and balance---------------------------->
+
+exports.editMeal=async(req,res)=>{
+
+  const {id} = req.params;
+  const {editMeal,editBalance} = req.body;
+
+  MealControl.update({memberId:id},
+      {
+        meal:editMeal,
+        balance:editBalance
+      },(error,data)=>{
+      if(error){
+          res.status(400).json({status:"fail",data:error})
+          return false;
+      }else{
+        console.log(data)
+          res.status(200).json({status:"success",data})
+          return true;
+      }
+  })
 }
 
 

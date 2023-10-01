@@ -14,7 +14,10 @@ const bcrypt = require('bcrypt');
 exports.registration = async(req,res)=>{
 
     try{
-        const {name,email,password,address,role,photo,mobile,MealInfo} = req.body;
+        const {name,email,password,address,role,mobile} = req.body;
+
+        const img ="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAo5JREFUOE991EvoVlUUBfDf33yk+aoUfJSCSWiIFkphJD0Qk8gsGmgQKb4w8ZGog6yECAt1UJmTFDInDRIHiSRIJD5SwhI0DDHKgVBgkopgaFqxZH9y+fvhhcv3nbvPWXvvtdbZHW59uuAePIRH8DDG4BqON96fcAnXmxAdjUX+34n7sRLPYG+9h9ANT2BSJTmAz/ALLrdwWoD57YuXMQ/b8GkjWVf816imF2ZjET7CdlzM/hZgT7yC5ZiO3yqWiu/FkAI7U23+XfHB2FL7V+BqAMPZSHyOVxtgd+N5ZGN4Oo9/8AV24a/qYBC+wjvYE8CBWIsfq81864/5eBSrcBp34AHMxVC8XtV2L26zfi2Hn6yyH6yMPTAZc4rTzj5IsndxDu9VMPwvTncBXNZQNvF+WI3wtamNraL2Y7XnuYrfleowLIBb8SV2V3AANuNj7GsDmDPD8S1GVDx0jMMnCf6Aafijgu1aauKGkinF5YuNwH04HMBjmNoAzIFnS7W0FHVzS/Kk3Rh/Hb4rD7Yw8/1QAHdiI75pZOuNN/AU1uAkYu5RmFFJ3m7sj/Ui6u4AflieaimWYEgOlwFNlfsRe0ysq/gWYu68qT4X4KX4OICzio+0GQMPw8wiOetQ8nNVmCExuhJ+X+DRILZJYacCmMmyHgfxe9noV2wo67QR+gZAWg4lOXsW70esAIab8XVbUsEHZZl2QM1vGRDp7s2yXir+ujUc+tTIyvxbWpVevQ1izkXxWCUXI+MrwDenTf5H2UybiJC7nXkX0Cv4t8AjWMRJdY9jAU60wDoDZh11F2IJduBoiXKhkudaxh6h5oW6mplSN5/mxG59TAUT8HRxOxYxe6r8s6bSkbLSqc60/A9RX4qkRAR+rgAAAABJRU5ErkJggg=="
+
 
         if(!name){
             return res.json({error:"name is empty"})
@@ -48,7 +51,7 @@ exports.registration = async(req,res)=>{
             mobile,
             address,
             role,
-            photo
+            photo:img
 
         }).save();
 
@@ -84,6 +87,24 @@ exports.registration = async(req,res)=>{
 
     }
 }
+
+// ---------------------------->get profiile data--------------->
+
+exports.getProfileData=async(req,res)=>{
+
+    const {email }= req.params;
+
+
+    const memberProfile = await Member.findOne({email:email});
+
+    if(memberProfile){
+        res.status(200).json({status:"success",data:memberProfile})
+    }else{
+        res.status(400).json({status:"fail",error:"fail"})
+    }
+}
+
+
 /// ---------------------------->member sign in----------------->
 
 exports.signIn=async(req,res)=>{
@@ -135,28 +156,30 @@ exports.UpdateProfile=async(req,res)=>{
 
     try{
 
-        const email = req.headers.email;
+        const {email} = req.params;
 
-        const {name,password,address,photo}=req.body;
+        const {name,address,photo,mobile}=req.body;
 
-        const hash = await hashPassword(password);
-
-         await Member.findOneAndUpdate({email:email},
-            {name:name,
-                password:hash,
+        const data =  await Member.findOneAndUpdate({email:email},
+            {
+                name:name,
                 address:address,
+                mobile:mobile,
                 photo:photo
-            });   
 
+            }
+        ) 
+         
+
+        if(data){
+            res.status(200).json({status:"success",data})
+        }
     }catch(error){
-
+    
         res.json('something went Wrong')
+        return true;
 
     }
-
-      
-
-
 
 }
 

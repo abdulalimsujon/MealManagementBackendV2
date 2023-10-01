@@ -12,7 +12,11 @@ const MealCostSchema = mongoose.Schema({
     grandTotalCost:{
         type:Number,
         default:0
-    }
+    },
+    createDate:{
+        type:Date,
+        default:Date.now()
+    },
 
 
 },{
