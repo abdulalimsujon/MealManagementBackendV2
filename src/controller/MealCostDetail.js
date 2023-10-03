@@ -32,27 +32,35 @@ exports.MealDetail=async(req,res)=>{
 
 exports.getMealCostDetail=async(req,res)=>{
 
-    const mealCostDetail = await  MealCostDetail.find({}).sort({createDate:1})
-    
-    let total=0;
+    const date = new Date();
+
+let day =parseInt( date.getDate());
+
+console.log(day)
+
+    const mealCostDetail = await  MealCostDetail.find({createDate:day})
+    console.log(mealCostDetail)
+
+    const allItems=[]
+    let sum = 0;
 
     for (let i in mealCostDetail){
+        const items =mealCostDetail[i].items
 
-        const items=mealCostDetail[i].items;
-    
-        
-        for(let j in items){
-           
-            total= total+ parseInt(items[j].value)
+        for (let j in items){
+            allItems.push(items[j])
+            sum=sum+ parseInt(items[j].value)
         }
-
     }
-    if(mealCostDetail.length>=0){
-       res.status(200).json({regularMealCostTotal:total,data:mealCostDetail})
-    }else{
-        res.status(400).json({error:"No Meal found"})
+    
+   // console.log(sum)
+  
 
-    }
+   console.log("===",allItems)
+  
+      
+       res.status(200).json({data:allItems,totalCost:sum})
+    
 
    
 } 

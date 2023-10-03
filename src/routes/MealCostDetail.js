@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/mealCostDetail',MealDetail);
 router.get('/getMealCostDetail',getMealCostDetail);
-// router.get('/TotalmealCost',totalMealCost)
+//router.get('/TotalmealCost',totalMealCost)
 
 
 

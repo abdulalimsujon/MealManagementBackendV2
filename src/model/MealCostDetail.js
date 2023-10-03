@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const date = new Date();
+
+let day = date.getDate();
 
 const MealCostSchema = mongoose.Schema({
 
@@ -14,17 +17,19 @@ const MealCostSchema = mongoose.Schema({
         default:0
     },
     createDate:{
-        type:Date,
-        default:Date.now()
+        type: Number,
+    default: day,
+
+      
     },
 
 
 },{
     versionKey: false ,
-    timeStamps:true
+ 
 })
 
 
-const MealCostDetail = mongoose.model('MealDetail',MealCostSchema)
+const MealCostDetail = mongoose.model('MealControl',MealCostSchema)
 
 module.exports = MealCostDetail;

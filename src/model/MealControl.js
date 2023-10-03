@@ -2,9 +2,14 @@ const mongoose = require('mongoose');
 
 const { ObjectId } = mongoose.Schema;
 
+const date = new Date();
+
+let day =parseInt( date.getDate());
+
 
 const MealControlSchema = mongoose.Schema({
     memberId: {
+
         type: ObjectId,
         ref:  'Member',
         required: true,
@@ -17,7 +22,10 @@ const MealControlSchema = mongoose.Schema({
         type:Number,
         default:0
     },
-    createDate:{type:Date,default:Date.now()},
+    date:{
+        type:Number,
+        default: day 
+    },
 
 
 },{
@@ -26,6 +34,6 @@ const MealControlSchema = mongoose.Schema({
 })
 
 
-const MealControl = mongoose.model('MealControl',MealControlSchema)
+const MealControl = mongoose.model('MealDetail',MealControlSchema)
 
 module.exports = MealControl;
