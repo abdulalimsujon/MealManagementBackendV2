@@ -30,6 +30,6 @@ const MealCostSchema = mongoose.Schema({
 })
 
 
-const MealCostDetail = mongoose.model('MealControl',MealCostSchema)
+const mealdetail = mongoose.model('mealdetail',MealCostSchema)
 
-module.exports = MealCostDetail;
+module.exports = mealdetail;

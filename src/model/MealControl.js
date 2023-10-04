@@ -1,15 +1,12 @@
 const mongoose = require('mongoose');
 
 const { ObjectId } = mongoose.Schema;
-
 const date = new Date();
 
-let day =parseInt( date.getDate());
-
+let day = date.getDate();
 
 const MealControlSchema = mongoose.Schema({
     memberId: {
-
         type: ObjectId,
         ref:  'Member',
         required: true,
@@ -29,11 +26,11 @@ const MealControlSchema = mongoose.Schema({
 
 
 },{
-    versionKey: false ,
-    timeStamps:true
+    versionKey: false 
+    
 })
 
 
-const MealControl = mongoose.model('MealDetail',MealControlSchema)
+const MealControl = mongoose.model('mealcontrol',MealControlSchema)
 
 module.exports = MealControl;

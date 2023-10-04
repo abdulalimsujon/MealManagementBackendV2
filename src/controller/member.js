@@ -7,8 +7,6 @@ const bcrypt = require('bcrypt');
 
 
 
-
-
 //------------------------->registration------------------------->
 
 exports.registration = async(req,res)=>{

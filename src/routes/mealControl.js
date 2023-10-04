@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { RegularMeal, perMemberMealCost,  MealRate, grandTotal, MealInformation, editMeal, mealInfo} = require('../controller/mealControl');
+const {  perMemberMealCost,  MealRate, grandTotal, MealInformation, editMeal, mealInfo, RegularMeal} = require('../controller/mealControl');
 
 
 const router = express.Router();

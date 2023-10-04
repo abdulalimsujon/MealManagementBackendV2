@@ -1,26 +1,28 @@
-
+ 
 
 // ------create regular meal and balance of a member------->
 
 const Member = require("../model/MemberModel");
+
 const MealControl = require("../model/MealControl");
 
 
 
 exports.RegularMeal = async(req,res)=>{
 
-  const date = new Date();
+  // const date = new Date();
 
-  let day =parseInt( date.getDate());
+  // let day =parseInt( date.getDate());
     
 try{
-    const {meal,balance,memberId,count}=req.body;
+    const {meal,balance,memberId,date}=req.body;
 
 
   const mealControl=  await new MealControl({
     memberId,
     meal,
-    balance
+    balance,
+    date
   
     
   
@@ -44,7 +46,6 @@ try{
 }
 
 }
-
 
 ///------------------ get all regular meal of each member--------->
 
