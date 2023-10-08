@@ -7,46 +7,39 @@ const Member = require("../model/MemberModel");
 const MealControl = require("../model/MealControl");
 
 
-
 exports.RegularMeal = async(req,res)=>{
-
-  // const date = new Date();
-
-  // let day =parseInt( date.getDate());
     
-try{
-    const {meal,balance,memberId,date}=req.body;
+  try{
+      const {meal,balance,memberId}=req.body;
 
-
-  const mealControl=  await new MealControl({
-    memberId,
-    meal,
-    balance,
-    date
+      
   
-    
   
+    const mealControl=  await new MealControl({
+      memberId,
+      meal,
+      balance
     
-}).save();
-    res.json({
-        mealControl:{
-            memberId:mealControl.memberId,
-           meal: mealControl.meal,
-            balance:mealControl.balance,
-            date:mealControl.date
-            
-
-        }
-    })
-
-}catch(error){
-
-    res.status(200).json(error)
-
-}
-
-}
-
+      
+  }).save();
+      res.json({
+          mealControl:{
+              memberId:mealControl.memberId,
+             meal: mealControl.meal,
+              balance:mealControl.balance,
+          
+              
+  
+          }
+      })
+  
+  }catch(error){
+  
+      res.status(200).json(error)
+  
+  }
+  
+  }
 ///------------------ get all regular meal of each member--------->
 
 exports.MealInformation=async(req,res)=>{
@@ -311,5 +304,3 @@ exports.editMeal=async(req,res)=>{
 
 
   
-
-
