@@ -2,29 +2,32 @@
 
 // ------create regular meal and balance of a member------->
 
+const MealControl = require("../model/MealControl");
 const Member = require("../model/MemberModel");
 
-const MealControl = require("../model/MealControl");
+
+
 
 
 exports.RegularMeal = async(req,res)=>{
     
   try{
-      const {meal,balance,memberId}=req.body;
+      const {meal,balance,_id}=req.body;
+
+
+      // console.log(meal,balance,_id)
 
       
-  
-  
     const mealControl=  await new MealControl({
-      memberId,
-      meal,
-      balance
+      _id,
+      meal:meal,
+      balance:balance
     
       
   }).save();
       res.json({
           mealControl:{
-              memberId:mealControl.memberId,
+             "id":mealControl._id,
              meal: mealControl.meal,
               balance:mealControl.balance,
           
@@ -59,7 +62,7 @@ exports.MealInformation=async(req,res)=>{
           await  MealControl.aggregate([      
         {
             $group: {
-            _id:"$memberId",
+            _id:"$_id",
                 totalMeal:{
                     $sum: "$meal"
      
@@ -153,16 +156,18 @@ exports.MealRate=async(req,res)=>{
 
     const {grantTotalCost} = req.params;
 
+    
+
       const totalMeal = await  MealControl.aggregate([      
             {
               $group: {
                 _id: null,          
                 grantTotalMeal:{
-                  $sum: '$meal'  
+                  $sum: '$meal' 
                 },
   
                 grantTotalBalance:{
-                  $sum: '$balance'  
+                  $sum: '$balance'   
                 },
   
               }
@@ -173,9 +178,11 @@ exports.MealRate=async(req,res)=>{
           if(error){
               console.log(error)
           }else{
-              const milRate = parseFloat(grantTotalCost/data[0].grantTotalMeal) 
-              const existBalance = parseFloat((data[0].grantTotalBalance)-(milRate*data[0].grantTotalMeal))   
-              res.json({status:"success",data:{milRate,grandBalace:data[0].grantTotalBalance,totalMeal:data[0].grantTotalMeal,grantExistBalance:existBalance}})
+        
+              const milRate = parseFloat(grantTotalCost/data[0]?.grantTotalMeal).toFixed(2) || null;
+              const existBalance = parseFloat((data[0]?.grantTotalBalance)-(milRate*data[0]?.grantTotalMeal)).toFixed(2) || null;
+              
+              res.json({status:"success",data:{milRate,grandBalace:data[0]?.grantTotalBalance || null,totalMeal:data[0]?.grantTotalMeal  ,grantExistBalance:existBalance || null}})
           }
   
       })

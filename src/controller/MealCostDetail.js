@@ -42,7 +42,7 @@ console.log(day)
     console.log(mealCostDetail)
 
     const allItems=[]
-    let sum = 0;
+    let sum = null;
 
     for (let i in mealCostDetail){
         const items =mealCostDetail[i].items
@@ -53,14 +53,17 @@ console.log(day)
         }
     }
     
-   // console.log(sum)
-  
 
-   console.log("===",allItems)
-  
-      
-       res.status(200).json({data:allItems,totalCost:sum})
+      if(sum==0){
+        res.status(400).json({data:"no market"})
+
+      }else{
+        res.status(200).json({data:allItems,totalCost:sum})
     
+
+      }
+      
+     
 
    
 } 
