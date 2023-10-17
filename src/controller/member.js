@@ -3,6 +3,7 @@ const { hashPassword, comparePassword} = require("../helper/auth");
 const jwt = require("jsonwebtoken");
 const Member=require("../model/MemberModel");
 const bcrypt = require('bcrypt');
+const MealControl = require("../model/MealControl");
 
 
 
@@ -212,16 +213,40 @@ exports.Search=async(req,res)=>{
    
     const {phone} = req.params;
 
-   const SearchMember=  await Member.find({mobile:phone});
-    if(SearchMember.length==0){
-        res.status(400).json({error:"No member"})
-        
-    }else{
 
-        res.status(200).json({member:SearchMember})
+      await Member.aggregate([
+        {
+          $lookup: {
+            from: "mealcontrols",
+            localField: "email",
+            foreignField: "email",
+            as: "MealInfo",
+          },
+        }
+      
+      ],function async(err,data){
+        for (let i in data){
 
-    }
-    
+            
+          if((data[i].mobile)==phone){
+
+            res.status(200).json({data:data[i]})
+          
+
+          }
+ }
+
+      
+
+      })
+      
+
+      
+
+
+
+
+   
 }
 
 
@@ -248,11 +273,8 @@ exports.Search=async(req,res)=>{
     }catch(error){
         console.log(error)
     }
-
-   
-    
+ 
   }
-
 
 
 

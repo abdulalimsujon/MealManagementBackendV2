@@ -36,7 +36,7 @@ exports.getMealCostDetail=async(req,res)=>{
 
 let day =parseInt( date.getDate());
 
-console.log(day)
+// console.log(day)
 
     const mealCostDetail = await  MealCostDetail.find({createDate:day})
     console.log(mealCostDetail)
@@ -69,3 +69,37 @@ console.log(day)
 } 
 
 
+///-------------get market total totalCost--------------------------->
+
+exports.getMarketTotalCost=async(req,res)=>{
+
+    const mealCostDetail = await  MealCostDetail.find({})
+    console.log(mealCostDetail)
+
+    const allItems=[]
+    let sum = null;
+
+    for (let i in mealCostDetail){
+        const items =mealCostDetail[i]?.items
+
+        for (let j in items){
+            allItems.push(items[j])
+
+         
+            console.log(items[j].value)
+            sum=sum+ parseInt(items[j]?.value)
+        }
+    }
+    
+
+      if(sum==0){
+        res.status(400).json({data:"no market"})
+
+      }else{
+        res.status(200).json({data:allItems,totalCost:sum})
+    
+
+      }
+      
+     
+    }

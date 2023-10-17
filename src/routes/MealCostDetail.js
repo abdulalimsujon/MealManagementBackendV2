@@ -1,5 +1,5 @@
 const express = require('express');
-const { MealDetail,  getMealCostDetail} = require('../controller/MealCostDetail');
+const { MealDetail,  getMealCostDetail, getMarketTotalCost} = require('../controller/MealCostDetail');
 
 
 const router = express.Router();
@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/mealCostDetail',MealDetail);
 router.get('/getMealCostDetail',getMealCostDetail);
-// router.get('/TotalmealCost',totalMealCost)
+router.get('/MarketTotalCost',getMarketTotalCost);
 
 
 

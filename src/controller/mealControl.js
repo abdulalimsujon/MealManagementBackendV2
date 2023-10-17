@@ -12,7 +12,7 @@ const Member = require("../model/MemberModel");
 exports.RegularMeal = async(req,res)=>{
     
   try{
-      const {meal,balance,_id}=req.body;
+      const {meal,balance,_id,email}=req.body;
 
 
       // console.log(meal,balance,_id)
@@ -20,6 +20,7 @@ exports.RegularMeal = async(req,res)=>{
       
     const mealControl=  await new MealControl({
       _id,
+      email,
       meal:meal,
       balance:balance
     
@@ -43,6 +44,9 @@ exports.RegularMeal = async(req,res)=>{
   }
   
   }
+
+ 
+
 ///------------------ get all regular meal of each member--------->
 
 exports.MealInformation=async(req,res)=>{
@@ -50,14 +54,7 @@ exports.MealInformation=async(req,res)=>{
 
   const {mealRate} = req.params;
 
-  console.log(mealRate)
-
-      const find = await Member.find({})
     //  console.log("=======",find[0]._id)
-
-    
-
-   
 
           await  MealControl.aggregate([      
         {
@@ -87,10 +84,7 @@ exports.MealInformation=async(req,res)=>{
           
                   const EachPersonMealInfo=[];
                
-             for (let i in data){
-               
-                   
-                      
+             for (let i in data){                   
                 const member= await Member.find({ _id: data[i]._id})
 
                 var MemberInfo= {};
@@ -156,6 +150,7 @@ exports.MealRate=async(req,res)=>{
 
     const {grantTotalCost} = req.params;
 
+
     
 
       const totalMeal = await  MealControl.aggregate([      
@@ -178,11 +173,16 @@ exports.MealRate=async(req,res)=>{
           if(error){
               console.log(error)
           }else{
+
+             console.log("cost ==>",grantTotalCost)
+             console.log("meal ==>",data[0].grantTotalMeal)
         
-              const milRate = parseFloat(grantTotalCost/data[0]?.grantTotalMeal).toFixed(2) || null;
-              const existBalance = parseFloat((data[0]?.grantTotalBalance)-(milRate*data[0]?.grantTotalMeal)).toFixed(2) || null;
+              const milRate = parseFloat(grantTotalCost/data[0]?.grantTotalMeal).toFixed(2) ;
+
+              console.log(milRate)
+              const existBalance = parseFloat((data[0]?.grantTotalBalance)-(milRate*data[0]?.grantTotalMeal)).toFixed(2);
               
-              res.json({status:"success",data:{milRate,grandBalace:data[0]?.grantTotalBalance || null,totalMeal:data[0]?.grantTotalMeal  ,grantExistBalance:existBalance || null}})
+              res.json({status:"success",data:{milRate,grandBalace:data[0]?.grantTotalBalance,totalMeal:data[0]?.grantTotalMeal  ,grantExistBalance:existBalance}})
           }
   
       })
@@ -190,22 +190,9 @@ exports.MealRate=async(req,res)=>{
 
 
 
-///------------------->update member cost by Admin-------------->
-
-
-exports.updateByAdmin=async(req,res)=>{
-
-    const {id} = req.params;
-    const {meal,balance,role} = req.body;
-          
-    await MealControl.findOneAndUpdate({_id:id},{meal:meal,balance:balance,role:role})
-
-
-}
-
 // ------------------>edit meal and balance---------------------------->
 
-exports.editMeal=async(req,res)=>{
+exports.updateMeal=async(req,res)=>{
 
   const {id} = req.params;
   const {editMeal,editBalance} = req.body;
@@ -257,57 +244,7 @@ exports.editMeal=async(req,res)=>{
 
     })
 }
-  //.............................. meal info by phone...................................
+ 
 
-  exports.mealInfo=async(req,res)=>{
-    const {phone }= req.params;
-
-    try{
-
-      const member = await MealControl.findOne({mobile:phone});
-
-    
-      if(member){
-          
-          res.status(200).json({member})
-      }else{
-  
-          res.json({'status':"fail"})
-  
-      }
-  
-      }catch(error){
-  
-          res.json("something went wrong")
-        
-      }
-  }
-
-  ///-----------------------------meal info by date---------------------->
-
-  exports.mealInfo=async(req,res)=>{
-    const {createdAt }= req.params;
-
-    try{
-
-      const member = await MealControl.findOne({createdAt:createdAt});
-
-    
-      if(member){
-          
-          res.status(200).json({member})
-      }else{
-  
-          res.json({'status':"fail"})
-  
-      }
-  
-      }catch(error){
-  
-          res.json("something went wrong")
-        
-      }
-  }
-
-
+ 
   

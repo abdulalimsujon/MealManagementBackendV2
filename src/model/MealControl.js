@@ -11,6 +11,15 @@ const MealCostSchema = mongoose.Schema({
         type: mongoose.Types.ObjectId, // specify the type as ObjectId
         default: () => new mongoose.Types.ObjectId(), // generate a new ObjectId by default
       },
+      email:{
+
+        type:String,
+        required:true,
+        unique:true,
+        trim:true
+
+    },
+
     meal:{
         type:Number,
         default:0
