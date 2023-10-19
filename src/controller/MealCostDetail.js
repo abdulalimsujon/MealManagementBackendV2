@@ -8,7 +8,8 @@ const MealCostDetail = require("../model/MealCostDetail");
 
 exports.MealDetail=async(req,res)=>{
     const {fields} = req.body; 
-    //  console.log("==========>",fields)
+     console.log("==========>",fields)
+     
      
     const mealDetail = await new MealCostDetail({
         

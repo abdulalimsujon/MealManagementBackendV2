@@ -10,6 +10,7 @@ const MealCostSchema = mongoose.Schema({
     items:{
         type: Schema.Types.Mixed,
         default: {},
+        required: true
     }
     ,
     grandTotalCost:{
