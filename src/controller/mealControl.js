@@ -45,6 +45,17 @@ exports.RegularMeal = async(req,res)=>{
   
   }
 
+  ///--------------------- get meal info by id----------------------------------->
+
+  exports.getMeal = async(req,res)=>{
+    const {id} = req.params;
+    console.log(id)
+
+   const  info =await MealControl.findOne({_id:id});
+
+   res.status(200).json({status:"success",data:info})
+  }
+
  
 
 ///------------------ get all regular meal of each member--------->
@@ -92,6 +103,7 @@ exports.MealInformation=async(req,res)=>{
                         for (let j in member){
 
                           MemberInfo["name"] = member[j]?.name;
+                          MemberInfo["Id"] = member[j]?._id;
                           MemberInfo["email"] = member[j]?.email;
                           MemberInfo["totalMeal"] = data[i]?.totalMeal;
                           MemberInfo["totalBalance"] =data[i]?.totalBalance;
@@ -174,8 +186,8 @@ exports.MealRate=async(req,res)=>{
               console.log(error)
           }else{
 
-             console.log("cost ==>",grantTotalCost)
-             console.log("meal ==>",data[0].grantTotalMeal)
+            // console.log("cost ==>",grantTotalCost)
+           //  console.log("meal ==>",data[0].grantTotalMeal)
         
               const milRate = parseFloat(grantTotalCost/data[0]?.grantTotalMeal).toFixed(2) ;
 
@@ -190,25 +202,27 @@ exports.MealRate=async(req,res)=>{
 
 
 
-// ------------------>edit meal and balance---------------------------->
+// ------------------>update meal and balance---------------------------->
 
 exports.updateMeal=async(req,res)=>{
 
-  const {id} = req.params;
-  const {editMeal,editBalance} = req.body;
+  const {value1} = req.params;
+  const {meal,balance} = req.body;
+  console.log(meal)
+  console.log(value1)
 
-  MealControl.update({memberId:id},
+  MealControl.update({_id:value1},
       {
-        meal:editMeal,
-        balance:editBalance
+        meal,
+        balance
       },(error,data)=>{
       if(error){
           res.status(400).json({status:"fail",data:error})
           return false;
       }else{
-        console.log(data)
+        //console.log(data)
           res.status(200).json({status:"success",data})
-          return true;
+         
       }
   })
 }
