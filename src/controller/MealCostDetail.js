@@ -40,7 +40,7 @@ let day =parseInt( date.getDate());
 // console.log(day)
 
     const mealCostDetail = await  MealCostDetail.find({createDate:day})
-    console.log(mealCostDetail)
+   // console.log(mealCostDetail)
 
     const allItems=[]
     let sum = null;
@@ -75,7 +75,7 @@ let day =parseInt( date.getDate());
 exports.getMarketTotalCost=async(req,res)=>{
 
     const mealCostDetail = await  MealCostDetail.find({})
-    console.log(mealCostDetail)
+   // console.log(mealCostDetail)
 
     const allItems=[]
     let sum = null;

@@ -4,8 +4,7 @@ const jwt = require("jsonwebtoken");
 const Member=require("../model/MemberModel");
 const bcrypt = require('bcrypt');
 const MealControl = require("../model/MealControl");
-
-
+const sendEmailUtility = require("../utility/sendMail");
 
 
 //------------------------->registration------------------------->
@@ -221,7 +220,8 @@ exports.Search=async(req,res)=>{
             localField: "email",
             foreignField: "email",
             as: "MealInfo",
-          },
+          }
+        
         }
       
       ],function async(err,data){
@@ -275,6 +275,47 @@ exports.Search=async(req,res)=>{
     }
  
   }
+
+
+////----------------------notify email for balance----------------------->
+
+
+
+exports.notifyBalanceByEmail=async(req,res)=>{
+
+    var {email,balance}=req.params;
+
+    console.log(email)
+
+
+
+    try{
+
+
+        let UserCount =  await Member.aggregate([{$match:{email:email}},{$count:"total"}])
+
+        if(UserCount.length>0){
+
+            //email send
+
+            let SendEmail = await sendEmailUtility(email,"your meal balance is  "+balance+"  Add money as soon  as possible","nofity for balance")
+
+            res.status(200).json({status:"success",data:SendEmail})
+
+        }else{
+            res.status(400).json({status:"fail",data:"No user found"})
+        } 
+
+
+    }catch(error){
+
+        res.json(400).json("something went wrong")
+
+    }
+
+
+}
+
 
 
 

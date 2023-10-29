@@ -49,7 +49,7 @@ exports.RegularMeal = async(req,res)=>{
 
   exports.getMeal = async(req,res)=>{
     const {id} = req.params;
-    console.log(id)
+  //  console.log(id)
 
    const  info =await MealControl.findOne({_id:id});
 
@@ -157,6 +157,8 @@ exports.perMemberMealCost=async(req,res)=>{
 }
 
 
+///--------------------meal rate----------------------->
+
 
 exports.MealRate=async(req,res)=>{
 
@@ -191,7 +193,7 @@ exports.MealRate=async(req,res)=>{
         
               const milRate = parseFloat(grantTotalCost/data[0]?.grantTotalMeal).toFixed(2) ;
 
-              console.log(milRate)
+             // console.log(milRate)
               const existBalance = parseFloat((data[0]?.grantTotalBalance)-(milRate*data[0]?.grantTotalMeal)).toFixed(2);
               
               res.json({status:"success",data:{milRate,grandBalace:data[0]?.grantTotalBalance,totalMeal:data[0]?.grantTotalMeal  ,grantExistBalance:existBalance}})

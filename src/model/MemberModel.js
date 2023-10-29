@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 
-
 const MemberSchema = mongoose.Schema({
-
     name:{
         type:String,
         required:true,
@@ -46,7 +44,5 @@ const MemberSchema = mongoose.Schema({
     timeStamps:true
 })
 
-
 const Member = mongoose.model('Member',MemberSchema)
-
 module.exports = Member;
