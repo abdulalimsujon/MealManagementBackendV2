@@ -298,7 +298,7 @@ exports.notifyBalanceByEmail=async(req,res)=>{
 
             //email send
 
-            let SendEmail = await sendEmailUtility(email,"your meal balance is  "+balance+"  Add money as soon  as possible","nofity for balance")
+            let SendEmail = await sendEmailUtility(email,"your meal balance is  "+balance+" .. Add money as soon  as possible","nofity for balance")
 
             res.status(200).json({status:"success",data:SendEmail})
 
